@@ -20,7 +20,7 @@
             </svg>
             <input type="text" name="{{ $searchName }}" value="{{ request($searchName) }}"
                 placeholder="{{ $placeholder }}"
-                class="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg
+                class="w-full pl-8 pr-4 py-2 text-sm border border-slate-200 rounded-lg
                     focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-colors">
         </div>
 
