@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginRequest extends FormRequest
 {
@@ -35,11 +37,36 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
+        $user = User::where('username', $this->username)->first();
+
+        if ($user && Hash::check($this->password, $user->password)) {
+            if ($user->delete_mark === '1') {
+                RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'username' => 'Akun Anda telah dihapus. Silakan hubungi Administrator.',
+                ]);
+            }
+
+            if ($user->status_user !== 'AKTIF') {
+                RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'username' => 'Akun Anda dinonaktifkan. Silakan hubungi Administrator.',
+                ]);
+            }
+        }
+
+        $credentials = [
+            'username'    => $this->username,
+            'password'    => $this->password,
+            'status_user' => 'AKTIF',
+            'delete_mark' => '0',
+        ];
+
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'username' => trans('auth.failed'),
+                'username' => 'Username atau password yang Anda masukkan salah.',
             ]);
         }
 
