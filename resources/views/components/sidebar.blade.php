@@ -39,158 +39,64 @@
 
     <nav class="flex-1 overflow-y-auto py-4 px-2 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800">
 
-        {{-- Dashboard --}}
-        <a href="{{ route('dashboard') }}" @click="if(isMobile) toggle()"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
-                {{ request()->routeIs('dashboard') ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            <span x-show="isOpen"
-                x-transition:enter="transition ease-out duration-200 delay-75"
-                x-transition:enter-start="opacity-0 -translate-x-2"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="font-medium whitespace-nowrap text-sm">Dashboard</span>
-        </a>
+        @if(isset($groupedMenus))
+            @foreach($groupedMenus as $groupName => $menus)
+                {{-- Section Header --}}
+                <div class="mt-4 mb-2" x-show="isOpen"
+                    x-transition:enter="transition ease-out duration-200 delay-100"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0">
+                    <div class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $groupName }}</div>
+                </div>
 
-        {{-- Section: User --}}
-        <div class="mt-6 mb-2" x-show="isOpen"
-            x-transition:enter="transition ease-out duration-200 delay-100"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-150"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0">
-            <div class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">User</div>
-        </div>
-
-        <a href="{{ route('users.index') }}" @click="if(isMobile) toggle()"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
-                {{ request()->routeIs('users.*') ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span x-show="isOpen"
-                x-transition:enter="transition ease-out duration-200 delay-75"
-                x-transition:enter-start="opacity-0 -translate-x-2"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="font-medium whitespace-nowrap text-sm">Manajemen User</span>
-        </a>
-
-        <a href="{{ route('jenis-user.index') }}" @click="if(isMobile) toggle()"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
-                {{ request()->routeIs('jenis-user.*') ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-            </svg>
-            <span x-show="isOpen"
-                x-transition:enter="transition ease-out duration-200 delay-75"
-                x-transition:enter-start="opacity-0 -translate-x-2"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="font-medium whitespace-nowrap text-sm">Jenis User</span>
-        </a>
-
-        {{-- Section: Menu --}}
-        <div class="mt-6 mb-2" x-show="isOpen"
-            x-transition:enter="transition ease-out duration-200 delay-100"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-150"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0">
-            <div class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Menu</div>
-        </div>
-
-        <a href="{{ route('menus.index') }}" @click="if(isMobile) toggle()"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
-                {{ request()->routeIs('menus.*') ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <span x-show="isOpen"
-                x-transition:enter="transition ease-out duration-200 delay-75"
-                x-transition:enter-start="opacity-0 -translate-x-2"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="font-medium whitespace-nowrap text-sm">Manajemen Menu</span>
-        </a>
-
-        <a href="{{ route('menu-level.index') }}" @click="if(isMobile) toggle()"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
-                {{ request()->routeIs('menu-level.*') ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            <span x-show="isOpen"
-                x-transition:enter="transition ease-out duration-200 delay-75"
-                x-transition:enter-start="opacity-0 -translate-x-2"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="font-medium whitespace-nowrap text-sm">Level Menu</span>
-        </a>
-
-        {{-- Section: Log --}}
-        <div class="mt-6 mb-2" x-show="isOpen"
-            x-transition:enter="transition ease-out duration-200 delay-100"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-150"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0">
-            <div class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Log</div>
-        </div>
-
-        <a href="{{ route('activity-log.index') }}" @click="if(isMobile) toggle()"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
-                {{ request()->routeIs('activity-log.*') ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-            </svg>
-            <span x-show="isOpen"
-                x-transition:enter="transition ease-out duration-200 delay-75"
-                x-transition:enter-start="opacity-0 -translate-x-2"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="font-medium whitespace-nowrap text-sm">Aktivitas User</span>
-        </a>
-
-        <a href="{{ route('error-log.index') }}" @click="if(isMobile) toggle()"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
-                {{ request()->routeIs('error-log.*') ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span x-show="isOpen"
-                x-transition:enter="transition ease-out duration-200 delay-75"
-                x-transition:enter-start="opacity-0 -translate-x-2"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="font-medium whitespace-nowrap text-sm">Log Error</span>
-        </a>
+                @foreach($menus as $menu)
+                    @php
+                        // Cek apakah request route saat ini cocok dengan link menu.
+                        // Karena link menu mungkin berupa path (/users) atau nama route (users.index).
+                        $isActive = false;
+                        $link = $menu->menu_link;
+                        
+                        // Menangani base path jika menu link mengarah ke root /
+                        if ($link === '/') {
+                            $isActive = request()->is('/');
+                        } else {
+                            // Trim leading slash for 'is()' matching
+                            $cleanLink = ltrim($link, '/');
+                            $isActive = request()->is($cleanLink) || request()->is($cleanLink . '/*');
+                        }
+                    @endphp
+                    
+                    <a href="{{ Str::startsWith($link, ['http', '/']) ? url($link) : route($link) }}" 
+                        @click="if(isMobile) toggle()"
+                        class="flex items-center space-x-3 px-3 py-2.5 rounded-lg mb-1 transition-colors
+                            {{ $isActive ? 'bg-primary-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                        
+                        <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center">
+                            @if($menu->menu_icon)
+                                {{-- Jika ada mekanisme render icon, bisa diletakkan di sini. Karena kita belum punya komponen <x-icon>, kita tampilkan inisial/fallback --}}
+                                <span class="text-[10px] font-mono font-bold leading-none">{{ strtoupper(substr(str_replace('lucide-', '', $menu->menu_icon), 0, 2)) }}</span>
+                            @else
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            @endif
+                        </div>
+                        
+                        <span x-show="isOpen"
+                            x-transition:enter="transition ease-out duration-200 delay-75"
+                            x-transition:enter-start="opacity-0 -translate-x-2"
+                            x-transition:enter-end="opacity-100 translate-x-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0"
+                            class="font-medium whitespace-nowrap text-sm">{{ $menu->menu_name }}</span>
+                    </a>
+                @endforeach
+            @endforeach
+        @endif
 
     </nav>
 

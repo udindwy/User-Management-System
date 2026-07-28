@@ -14,7 +14,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'menu.access'])->group(function () {
 
     Route::get('/profile', fn () => view('dashboard'))->name('profile.edit');
 
@@ -40,8 +40,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{menu}', [MenuController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('/jenis-user', fn () => view('dashboard'))->name('jenis-user.index');
-    Route::get('/menu-level', fn () => view('dashboard'))->name('menu-level.index');
+    Route::prefix('menu-access')->name('menu-access.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\MenuAccessController::class, 'index'])->name('index');
+        Route::get('/{user}/edit', [\App\Http\Controllers\MenuAccessController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [\App\Http\Controllers\MenuAccessController::class, 'update'])->name('update');
+    });
+
     Route::get('/activity-log', fn () => view('dashboard'))->name('activity-log.index');
     Route::get('/error-log', fn () => view('dashboard'))->name('error-log.index');
 

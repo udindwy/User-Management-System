@@ -8,7 +8,7 @@
         ]" />
     </x-slot>
 
-    <div class="max-w-2xl">
+    <div class="w-full">
 
         <x-page-header
             title="Tambah User"

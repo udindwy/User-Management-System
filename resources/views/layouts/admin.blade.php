@@ -30,9 +30,11 @@
         x-data="{ get ml() { return Alpine.store('sidebar') && Alpine.store('sidebar').isOpen ? 'md:ml-64' : 'md:ml-20'; } }"
         :class="ml">
 
-        <main class="p-4 md:p-6 min-h-[calc(100vh-4rem)]">
+        <main class="p-4 md:p-6 min-h-[calc(100vh-4rem-68px)] block w-full">
             {{ $slot }}
         </main>
+        
+        <x-footer />
 
     </div>
 
