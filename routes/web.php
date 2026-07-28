@@ -10,16 +10,22 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware(['auth', 'menu.access'])->group(function () {
 
-    Route::get('/profile', fn () => view('dashboard'))->name('profile.edit');
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('edit');
+        Route::put('/', [\App\Http\Controllers\ProfileController::class, 'update'])->name('update');
+        Route::put('/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('password');
+        Route::post('/foto', [\App\Http\Controllers\ProfileController::class, 'uploadFoto'])->name('foto');
+    });
 
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/list', [UserController::class, 'index'])->name('list');
         Route::get('/create', [UserController::class, 'create'])->name('create');
         Route::post('/', [UserController::class, 'store'])->name('store');
         Route::get('/{user}', [UserController::class, 'show'])->name('show');
@@ -46,8 +52,12 @@ Route::middleware(['auth', 'menu.access'])->group(function () {
         Route::put('/{user}', [\App\Http\Controllers\MenuAccessController::class, 'update'])->name('update');
     });
 
-    Route::get('/activity-log', fn () => view('dashboard'))->name('activity-log.index');
-    Route::get('/error-log', fn () => view('dashboard'))->name('error-log.index');
+    Route::get('/activity-log', [\App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-log.index');
+    
+    Route::prefix('logs')->name('error-log.')->group(function () {
+        Route::get('/errors', [\App\Http\Controllers\ErrorLogController::class, 'index'])->name('index');
+        Route::get('/errors/{id}', [\App\Http\Controllers\ErrorLogController::class, 'show'])->name('show');
+    });
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 });

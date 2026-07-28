@@ -17,6 +17,19 @@ class MenuUserSeeder extends Seeder
             ['id_user' => 'USR001', 'menu_id' => 'M01', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
             ['id_user' => 'USR001', 'menu_id' => 'M02', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
             ['id_user' => 'USR001', 'menu_id' => 'L01', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
+            ['id_user' => 'USR001', 'menu_id' => 'L02', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
+            
+            
+            ['id_user' => 'USR002', 'menu_id' => 'D02', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
+            ['id_user' => 'USR002', 'menu_id' => 'P01', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
+            
+            
+            ['id_user' => 'USR003', 'menu_id' => 'D03', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
+            ['id_user' => 'USR003', 'menu_id' => 'P01', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
+            
+            
+            ['id_user' => 'USR004', 'menu_id' => 'D03', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
+            ['id_user' => 'USR004', 'menu_id' => 'P01', 'create_date' => $now, 'create_time' => $now, 'delete_mark' => '0', 'update_by' => null, 'update_date' => null],
         ]);
     }
 }

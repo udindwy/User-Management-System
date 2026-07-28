@@ -76,4 +76,58 @@ class LErrorApplication extends Model
             'update_date' => now(),
         ]);
     }
+
+    
+    public static function logException(\Throwable $e): void
+    {
+        try {
+            $request = request();
+            $route = $request->route();
+
+            $controller = null;
+            $function = null;
+            $modules = $request->path();
+
+            if ($route && $route->getAction('controller')) {
+                $action = explode('@', class_basename($route->getAction('controller')));
+                $controller = $action[0] ?? null;
+                $function = $action[1] ?? null;
+            }
+
+            
+            $idUser = auth()->check() ? auth()->user()->id_user : 'SYSTEM';
+
+            
+            $paramRaw = $request->except(['password', 'password_confirmation', 'foto']);
+            $param = json_encode($paramRaw);
+            if (strlen($param) > 300) {
+                $param = substr($param, 0, 297) . '...';
+            }
+            
+            $errorMsg = $e->getMessage() ?: get_class($e);
+            if (strlen($errorMsg) > 1000) {
+                $errorMsg = substr($errorMsg, 0, 997) . '...';
+            }
+
+            self::create([
+                'id_user'       => $idUser,
+                'error_date'    => now()->toDateString(),
+                'modules'       => substr($modules, 0, 100),
+                'controller'    => substr($controller ?? '', 0, 200),
+                'function'      => substr($function ?? '', 0, 200),
+                'error_line'    => (string) $e->getLine(),
+                'error_message' => $errorMsg,
+                'status'        => (string) $e->getCode() ?: 'ERROR',
+                'param'         => $param,
+                'create_date'   => now(),
+                'create_time'   => now()->toTimeString(),
+                'delete_mark'   => '0',
+                'update_by'     => null,
+                'update_date'   => null,
+            ]);
+        } catch (\Exception $fallback) {
+            
+            \Illuminate\Support\Facades\Log::error('Gagal mencatat Error Application ke DB: ' . $fallback->getMessage());
+        }
+    }
 }

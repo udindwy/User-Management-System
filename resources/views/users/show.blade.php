@@ -13,7 +13,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        {{-- ===== LEFT: Profile Card ===== --}}
+        
         <div class="lg:col-span-1 space-y-5">
 
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 text-center">
@@ -58,10 +58,7 @@
                             x-data @submit.prevent="if(confirm('Ubah status user ini?')) $el.submit()">
                             @csrf
                             <button type="submit"
-                                class="w-full py-2 text-sm font-medium border rounded-lg transition-colors
-                                    {{ $user->status_user === 'AKTIF'
-                                        ? 'border-red-300 text-red-600 hover:bg-red-50'
-                                        : 'border-green-300 text-green-600 hover:bg-green-50' }}">
+                                class="w-full py-2 text-sm font-medium border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg transition-colors">
                                 {{ $user->status_user === 'AKTIF' ? 'Nonaktifkan' : 'Aktifkan' }}
                             </button>
                         </form>
@@ -87,7 +84,7 @@
                 <p class="text-xs text-slate-400">JPG, JPEG, PNG, WebP. Maks. 2MB</p>
             </x-form-section>
 
-            {{-- Reset Password --}}
+            
             <x-form-section>
                 <x-slot name="title">
                     <button @click="open = !open" x-data="{ open: false }" id="reset-pwd-btn"
@@ -128,7 +125,7 @@
 
         </div>
 
-        {{-- ===== RIGHT: Detail Info ===== --}}
+        
         <div class="lg:col-span-2 space-y-5">
 
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm">

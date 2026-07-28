@@ -68,4 +68,20 @@ class UserActivity extends Model
             'delete_mark' => '0',
         ]);
     }
+
+    
+    public static function log(string $status, string $description, ?string $menuId = null): void
+    {
+        if (auth()->check()) {
+            self::create([
+                'id_user' => auth()->user()->id_user,
+                'status' => $status,
+                'diskripsi' => $description,
+                'menu_id' => $menuId,
+                'create_by' => auth()->user()->id_user,
+                'create_date' => now(),
+                'delete_mark' => '0',
+            ]);
+        }
+    }
 }

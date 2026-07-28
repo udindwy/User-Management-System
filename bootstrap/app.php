@@ -20,4 +20,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+        $exceptions->reportable(function (\Throwable $e) {
+            // Jangan log error 404 (Not Found) atau 403 (Forbidden) karena ini bukan masalah server/aplikasi
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException || 
+                $e instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException ||
+                $e instanceof \Illuminate\Auth\AuthenticationException) {
+                return;
+            }
+
+            \App\Models\LErrorApplication::logException($e);
+        });
     })->create();

@@ -38,7 +38,7 @@ class MenuController extends Controller
     public function create()
     {
         $levels = MenuLevel::all();
-        $parents = Menu::active()->where('id_level', 'LVL001')->get(); // Biasanya parent itu Main Menu
+        $parents = Menu::active()->where('id_level', 'LVL001')->get();
         return view('menus.create', compact('levels', 'parents'));
     }
 
@@ -58,7 +58,7 @@ class MenuController extends Controller
             'create_date' => now()->toDateString(),
         ]);
 
-        $this->logActivity($actorId, "Tambah menu: {$request->menu_name}");
+        $this->logActivity($actorId, "Tambah menu: {$request->menu_name}", 'Tambah Data');
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan.');
     }
@@ -86,7 +86,7 @@ class MenuController extends Controller
             'update_date' => now()->toDateString(),
         ]);
 
-        $this->logActivity($actorId, "Edit menu: {$menu->menu_name}");
+        $this->logActivity($actorId, "Edit menu: {$menu->menu_name}", 'Edit Data');
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil diperbarui.');
     }
@@ -98,20 +98,13 @@ class MenuController extends Controller
 
         $menu->softDelete($actorId);
 
-        $this->logActivity($actorId, "Hapus menu: {$menu->menu_name}");
+        $this->logActivity($actorId, "Hapus menu: {$menu->menu_name}", 'Hapus Data');
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
 
-    private function logActivity(string $userId, string $description): void
+    private function logActivity(string $userId, string $description, string $action = 'Aksi Data'): void
     {
-        UserActivity::create([
-            'id_user'     => $userId,
-            'diskripsi'   => $description,
-            'status'      => 'SUCCESS',
-            'delete_mark' => '0',
-            'create_by'   => $userId,
-            'create_date' => now(),
-        ]);
+        UserActivity::log($action, $description, 'M01');
     }
 }

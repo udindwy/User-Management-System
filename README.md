@@ -1,58 +1,137 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# User Management System (Core Framework)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi **User Management System** adalah sebuah sistem fondasi (*core framework*) yang dibangun menggunakan Laravel. Sistem ini dirancang untuk mengelola autentikasi, manajemen pengguna, hak akses menu yang sepenuhnya dinamis, serta sistem *logging* otomatis untuk aktivitas pengguna dan *error* aplikasi.
 
-## About Laravel
+Sistem ini sangat ideal digunakan sebagai basis (*starter kit*) untuk pengembangan aplikasi tingkat perusahaan (ERP, HRIS, Inventory, dll) karena arsitekturnya yang kokoh dan modular.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Autentikasi & Profil (Breeze)**
+   - Login, Logout (dengan modal dinamis), dan Session Teramankan.
+   - Halaman Profil untuk mengubah data, mengganti *password*, dan mengunggah foto profil.
+   - *Password Hashing* dan proteksi rute secara ketat.
 
-## Learning Laravel
+2. **Manajemen Pengguna (*User Management*)**
+   - *CRUD* data pengguna secara komprehensif.
+   - Mekanisme *Soft Delete* kustom menggunakan kolom `delete_mark`.
+   - Mengubah status pengguna (*Aktif / Nonaktif*).
+   - Pengelolaan foto profil multi-tabel.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Menu Dinamis & Hak Akses (*Role-Based Access Control / RBAC*)**
+   - Manajemen hierarki menu (mendukung *Parent-Child*, ikon, dan level menu).
+   - Penentuan hak akses spesifik per pengguna melalui tabel `MENU_USER` (bukan sekadar berbasis peran/Role).
+   - *Middleware* `CheckMenuAccess` yang secara otomatis memvalidasi setiap URL berdasarkan hak akses yang dimiliki pengguna. Menu di *sidebar* juga dirender secara dinamis.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **User Activity Log**
+   - Pencatatan aktivitas esensial secara otomatis (Login, Logout, Tambah Data, Edit Data, Hapus Data, Buka Menu).
+   - Membantu audit keamanan (mengetahui siapa melakukan apa dan kapan).
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+5. **Error Monitoring Log**
+   - Menangkap segala bentuk *Exception/Error* aplikasi secara otomatis.
+   - Mencatat detail krusial: *User, Modul, Controller, Function, Error Line, Pesan Error, Parameter,* dan waktu kejadian ke dalam *database*.
 
-## Agentic Development
+6. **Premium UI/UX**
+   - Desain antarmuka modern, korporat, minimalis menggunakan **Tailwind CSS**.
+   - Efek interaktif dan transisi halus dibantu oleh **Alpine.js**.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## 🛠️ Teknologi yang Digunakan
 
-php artisan boost:install
-```
+- **Framework:** Laravel (v11/12)
+- **Authentication:** Laravel Breeze
+- **Frontend / Styling:** Blade Templating, Tailwind CSS, Alpine.js
+- **Database:** MySQL
+- **Icons:** Bootstrap Icons, Lucide Icons
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 📋 Prasyarat Sistem
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Pastikan sistem Anda telah terpasang:
+- **PHP** >= 8.2
+- **Composer**
+- **Node.js** & **NPM**
+- **MySQL** / MariaDB (via Laragon, XAMPP, dll)
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## ⚙️ Panduan Instalasi
 
-## Security Vulnerabilities
+1. **Clone repositori**
+   ```bash
+   git clone <url-repositori-anda> user-management-system
+   cd user-management-system
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. **Install dependensi PHP dan Node.js**
+   ```bash
+   composer install
+   npm install
+   ```
 
-## License
+3. **Konfigurasi Environment**
+   Salin file konfigurasi bawaan dan hasilkan *Application Key*:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   Buka file `.env`, lalu atur konfigurasi *database* Anda:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nama_database_anda
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+4. **Jalankan Migrasi Database dan Seeder**
+   Sistem ini telah dilengkapi dengan data awal (*dummy data*) dan struktur menu.
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+5. **Kompilasi Aset Frontend dan Jalankan Server**
+   Gunakan dua terminal berbeda untuk menjalankan perintah ini secara bersamaan:
+   ```bash
+   # Terminal 1 (Untuk kompilasi Tailwind/CSS)
+   npm run dev
+
+   # Terminal 2 (Untuk menjalankan server PHP)
+   php artisan serve
+   ```
+
+6. **Akses Aplikasi**
+   Buka *browser* Anda dan akses: `http://localhost:8000`
+
+---
+
+## 🔑 Akun Default (Seeder)
+
+Setelah menjalankan *seeder*, Anda dapat mencoba *login* menggunakan kredensial berikut:
+
+| Peran | Username | Password |
+|-------|----------|----------|
+| **Super Admin** | `superadmin` | `Admin@1234` |
+| **Manager** | `budi.mgr` | `Manager@1234` |
+
+*(Super Admin secara otomatis kebal dari pembatasan hak akses berkat ID `USR001`).*
+
+---
+
+## 🗄️ Struktur Database Core
+
+1. `users`: Tabel utama pengguna.
+2. `user_foto`: Tabel pengelolaan riwayat/koleksi foto pengguna.
+3. `jenis_user`: Level hierarki (*Admin, Manager, User*).
+4. `menu` & `menu_level`: Mengelola daftar menu aplikasi.
+5. `menu_user`: Tabel *Pivot* akses menu bagi tiap pengguna (RBAC Inti).
+6. `user_activity`: Tabel catatan jejak (*Activity Log*).
+7. `l_error_application`: Tabel penangkapan *Exception (Error Log)*.
+
+**Catatan Khusus:** Sistem ini menggunakan konsep *Soft Delete* independen (tidak menggunakan bawaan Laravel `deleted_at`). Sistem mengandalkan kolom kustom bertipe *String* yaitu `delete_mark` ('0' = Aktif, '1' = Terhapus).
+
+---

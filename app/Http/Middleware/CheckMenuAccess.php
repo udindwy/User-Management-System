@@ -9,11 +9,7 @@ use App\Models\Menu;
 
 class CheckMenuAccess
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+    
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check()) {
@@ -22,14 +18,15 @@ class CheckMenuAccess
 
         $user = auth()->user();
         
-        // Dapatkan path atau route saat ini. Kita coba menggunakan path URI.
-        // Contoh: /users, /menus, /activity-log
+        
+        
         $path = '/' . ltrim($request->path(), '/');
 
-        // Cari menu yang link-nya me-match $path.
-        // Karena link di DB bisa '/users' dan request path bisa '/users/create', kita harus cek base-nya.
-        // Namun cara paling aman adalah memeriksa apakah URI terdaftar di tabel Menu
-        $menus = Menu::active()->get();
+        
+        
+        
+        
+        $menus = Menu::active()->orderByRaw('LENGTH(menu_link) DESC')->get();
         $matchedMenu = null;
 
         foreach ($menus as $menu) {
@@ -44,16 +41,17 @@ class CheckMenuAccess
                 $cleanLink = ltrim($link, '/');
                 if ($request->is($cleanLink) || $request->is($cleanLink . '/*')) {
                     $matchedMenu = $menu;
-                    // Kita asumsikan menu pertama yang match adalah yang paling relevan.
+                    
                     break;
                 }
             }
         }
 
-        // Jika rute ini terdaftar di tabel MENU, maka kita harus memvalidasi aksesnya
+        
         if ($matchedMenu) {
-            // Super Admin (USR001) memiliki hak istimewa (bypass) agar tidak pernah terkunci dari sistem
-            if ($user->id_user === 'USR001') {
+            
+            
+            if ($user->id_user === 'USR001' || $matchedMenu->menu_id === 'P01') {
                 return $next($request);
             }
 
@@ -63,13 +61,35 @@ class CheckMenuAccess
                 ->exists();
 
             if (!$hasAccess) {
-                // Return 403 Forbidden
+                
+                if ($matchedMenu->menu_id === 'U01') {
+                    $hasU02 = \App\Models\MenuUser::active()
+                        ->where('id_user', $user->id_user)
+                        ->where('menu_id', 'U02')
+                        ->exists();
+                    if ($hasU02) {
+                        $hasAccess = true;
+                    }
+                }
+            }
+
+            if (!$hasAccess) {
+                
                 abort(403, 'Akses Ditolak. Anda tidak memiliki izin untuk mengakses menu ini.');
             }
         }
 
-        // Jika rute tidak terdaftar di tabel MENU (misalnya /profile), maka akses diperbolehkan (global).
         
+        
+        
+        if ($matchedMenu && $request->isMethod('GET') && !$request->ajax()) {
+            \App\Models\UserActivity::log(
+                'Akses Menu', 
+                "Mengakses halaman menu: {$matchedMenu->menu_name}", 
+                $matchedMenu->menu_id
+            );
+        }
+
         return $next($request);
     }
 }

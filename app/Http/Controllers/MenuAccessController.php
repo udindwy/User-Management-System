@@ -27,7 +27,6 @@ class MenuAccessController extends Controller
 
         $users = $query->paginate(10)->withQueryString();
 
-        // Count menus per user
         $menuCounts = MenuUser::active()
             ->select('id_user', DB::raw('count(*) as total'))
             ->groupBy('id_user')
@@ -43,8 +42,6 @@ class MenuAccessController extends Controller
         $menus = Menu::active()->orderBy('id_level')->orderBy('menu_id')->get();
         $userMenus = MenuUser::active()->where('id_user', $id)->pluck('menu_id')->toArray();
 
-        // Group menus logically by level (Main Menu, Sub Menu, etc. based on id_level)
-        // Usually, users want to see it grouped by Parent if it's a hierarchy, but let's group by Level as per standard
         $groupedMenus = $menus->groupBy('id_level');
 
         return view('menu-access.edit', compact('user', 'groupedMenus', 'userMenus'));
@@ -64,7 +61,6 @@ class MenuAccessController extends Controller
             $toRemove = array_diff($currentMenuIds, $selectedMenuIds);
             $toAdd = array_diff($selectedMenuIds, $currentMenuIds);
 
-            // Remove (soft delete)
             if (!empty($toRemove)) {
                 MenuUser::active()
                     ->where('id_user', $user->id_user)
@@ -76,9 +72,7 @@ class MenuAccessController extends Controller
                     ]);
             }
 
-            // Add
             foreach ($toAdd as $menuId) {
-                // Check if it exists but is deleted to restore, or create new
                 $existing = MenuUser::where('id_user', $user->id_user)
                     ->where('menu_id', $menuId)
                     ->first();
@@ -97,20 +91,13 @@ class MenuAccessController extends Controller
             }
         });
 
-        $this->logActivity($actorId, "Mengubah hak akses menu untuk user: {$user->username}");
+        $this->logActivity($actorId, "Mengubah hak akses menu untuk user: {$user->username}", 'Edit Data');
 
         return redirect()->route('menu-access.index')->with('success', 'Hak akses berhasil diperbarui.');
     }
 
-    private function logActivity(string $userId, string $description): void
+    private function logActivity(string $userId, string $description, string $action = 'Aksi Data'): void
     {
-        UserActivity::create([
-            'id_user'     => $userId,
-            'diskripsi'   => $description,
-            'status'      => 'SUCCESS',
-            'delete_mark' => '0',
-            'create_by'   => $userId,
-            'create_date' => now(),
-        ]);
+        UserActivity::log($action, $description, 'M02');
     }
 }

@@ -23,7 +23,7 @@
 </head>
 <body class="font-sans antialiased bg-white min-h-screen flex">
 
-    {{-- ===== LEFT PANEL ===== --}}
+    
     <div class="hidden lg:flex lg:w-5/12 xl:w-1/2 bg-slate-900 relative overflow-hidden flex-col">
 
         <div class="absolute inset-0 bg-dots opacity-100"></div>
@@ -77,7 +77,7 @@
         </div>
     </div>
 
-    {{-- ===== RIGHT PANEL ===== --}}
+    
     <div class="w-full lg:w-7/12 xl:w-1/2 flex items-center justify-center bg-white px-6 sm:px-10 py-12">
 
         <div class="w-full max-w-sm">

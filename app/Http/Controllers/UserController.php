@@ -67,7 +67,7 @@ class UserController extends Controller
             'create_date'   => now(),
         ]);
 
-        $this->logActivity($actorId, "Tambah user: {$request->username}");
+        $this->logActivity($actorId, "Tambah user: {$request->username}", 'Tambah Data');
 
         return redirect()->route('users.index')
             ->with('success', 'User berhasil ditambahkan.');
@@ -93,7 +93,6 @@ class UserController extends Controller
 
         $user->update([
             'nama_user'     => $request->nama_user,
-            'username'      => $request->username,
             'email'         => $request->email,
             'no_hp'         => $request->no_hp,
             'wa'            => $request->wa,
@@ -103,10 +102,14 @@ class UserController extends Controller
             'update_date'   => now(),
         ]);
 
-        $this->logActivity($actorId, "Edit user: {$user->username}");
+        if ($request->filled('password')) {
+            $user->update(['password' => Hash::make($request->password)]);
+        }
 
-        return redirect()->route('users.show', $id)
-            ->with('success', 'User berhasil diperbarui.');
+        $this->logActivity($actorId, "Update data user: {$user->username}", 'Edit Data');
+
+        return redirect()->route('users.index')
+            ->with('success', 'Data user berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -114,9 +117,17 @@ class UserController extends Controller
         $user    = User::active()->findOrFail($id);
         $actorId = Auth::user()->id_user;
 
-        $user->softDelete($actorId);
+        if ($user->id_user === $actorId) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
 
-        $this->logActivity($actorId, "Hapus user: {$user->username}");
+        $user->update([
+            'delete_mark' => '1',
+            'update_by'   => $actorId,
+            'update_date' => now(),
+        ]);
+
+        $this->logActivity($actorId, "Hapus user: {$user->username}", 'Hapus Data');
 
         return redirect()->route('users.index')
             ->with('success', 'User berhasil dihapus.');
@@ -144,7 +155,7 @@ class UserController extends Controller
             'create_date' => now(),
         ]);
 
-        $this->logActivity($actorId, "Upload foto user: {$user->username}");
+        $this->logActivity($actorId, "Upload foto user: {$user->username}", 'Edit Data');
 
         return back()->with('success', 'Foto berhasil diunggah.');
     }
@@ -163,7 +174,7 @@ class UserController extends Controller
         ]);
 
         $label = $newStatus === 'AKTIF' ? 'diaktifkan' : 'dinonaktifkan';
-        $this->logActivity($actorId, "User {$user->username} {$label}");
+        $this->logActivity($actorId, "User {$user->username} {$label}", 'Edit Data');
 
         return back()->with('success', "User berhasil {$label}.");
     }
@@ -183,21 +194,13 @@ class UserController extends Controller
             'update_date' => now(),
         ]);
 
-        $this->logActivity($actorId, "Reset password user: {$user->username}");
+        $this->logActivity($actorId, "Reset password user: {$user->username}", 'Edit Data');
 
         return back()->with('success', 'Password berhasil direset.');
     }
 
-    private function logActivity(string $userId, string $description): void
+    private function logActivity(string $userId, string $description, string $action = 'Aksi Data'): void
     {
-        UserActivity::create([
-            'id_user'     => $userId,
-            'diskripsi'   => $description,
-            'status'      => 'SUCCESS',
-            'menu_id'     => null,
-            'delete_mark' => '0',
-            'create_by'   => $userId,
-            'create_date' => now(),
-        ]);
+        UserActivity::log($action, $description, 'U01');
     }
 }

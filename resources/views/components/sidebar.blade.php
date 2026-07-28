@@ -41,7 +41,7 @@
 
         @if(isset($groupedMenus))
             @foreach($groupedMenus as $groupName => $menus)
-                {{-- Section Header --}}
+                
                 <div class="mt-4 mb-2" x-show="isOpen"
                     x-transition:enter="transition ease-out duration-200 delay-100"
                     x-transition:enter-start="opacity-0"
@@ -76,7 +76,7 @@
                         
                         <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center">
                             @if($menu->menu_icon)
-                                {{-- Jika ada mekanisme render icon, bisa diletakkan di sini. Karena kita belum punya komponen <x-icon>, kita tampilkan inisial/fallback --}}
+                                
                                 <span class="text-[10px] font-mono font-bold leading-none">{{ strtoupper(substr(str_replace('lucide-', '', $menu->menu_icon), 0, 2)) }}</span>
                             @else
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
